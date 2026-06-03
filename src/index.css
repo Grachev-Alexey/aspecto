@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", "Arial", sans-serif;
+  --font-serif: "Cormorant Garamond", "Times New Roman", serif;
+  --font-mono: "Fira Code", monospace;
+  
+  --color-primary: #ff8562;
+  --color-secondary: #121212;
+  --color-tertiary: #303030;
+  --color-surface-card: #181818;
+  --color-accent-amber: #ff8562;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff8562;
+}
+
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Custom typography utilities for the specific design specification */
+@utility text-headline-display {
+  font-family: var(--font-sans);
+  font-size: 78px;
+  font-weight: 400;
+  line-height: 94px;
+  letter-spacing: 0px;
+}
+
+@utility text-headline-lg {
+  font-family: var(--font-sans);
+  font-size: 52px;
+  font-weight: 400;
+  line-height: 91px;
+  letter-spacing: 0px;
+}
+
+@utility text-headline-md {
+  font-family: var(--font-sans);
+  font-size: 35px;
+  font-weight: 400;
+  line-height: 48px;
+  letter-spacing: 0px;
+}
+
+@utility text-label-lg {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 29px;
+  letter-spacing: 0px;
+}
+
+@utility text-label-md {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0px;
+}
+
+@utility text-label-sm {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
+  letter-spacing: 0px;
+}
+
+/* Custom button styles to match specific requirements precisely */
+.btn-primary {
+  background-color: #ffffff;
+  color: #121212;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 120px;
+  min-height: 55px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  background-color: #ff8562;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 0px;
+  padding: 8px 16px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  min-width: 120px;
+  min-height: 55px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary:hover {
+  background-color: #ffffff;
+  color: #121212;
+  transform: translateY(-2px);
+}
+
+.btn-link {
+  background-color: transparent;
+  color: #ffffff; /* We'll use lighter supporting text color on light backgrounds if needed, otherwise white */
+  border: 0px;
+  padding: 0px;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 300;
+  text-decoration: underline;
+  text-decoration-color: #efa82c;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-link:hover {
+  opacity: 0.8;
+}
+
+/* Studio visual aesthetics styles */
+.wood-grain-overlay {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

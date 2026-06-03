@@ -1,0 +1,6 @@
+{
+  "name": "Аспекто",
+  "description": "Студия авторской мебели Аспекто. Собственное производство корпусной и встроенной мебели любой сложности в Москве.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
