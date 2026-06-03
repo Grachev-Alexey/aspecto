@@ -3,17 +3,17 @@ import { MapPin, Phone, Mail, Clock, ShieldCheck, Calendar, ArrowRight, MessageS
 
 interface ContactsPageProps {
   onNotify: (message: string, type: "success" | "info") => void;
-  onAddLead?: (lead: any) => void;
 }
 
-export default function ContactsPage({ onNotify, onAddLead }: ContactsPageProps) {
+export default function ContactsPage({ onNotify }: ContactsPageProps) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    visitType: "measure", // 'measure' | 'factory'
+    visitType: "measure",
     preferredTime: "",
     comments: ""
   });
+  const [consent, setConsent] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,22 +22,27 @@ export default function ContactsPage({ onNotify, onAddLead }: ContactsPageProps)
       onNotify("Пожалуйста, заполните Имя и Номер телефона", "info");
       return;
     }
+    if (!consent) {
+      onNotify("Необходимо дать согласие на обработку персональных данных.", "info");
+      return;
+    }
 
-    const leadCategory = formData.visitType === "measure" 
-      ? "Выезд замерщика с образцами" 
+    const leadCategory = formData.visitType === "measure"
+      ? "Выезд замерщика с образцами"
       : "Визит на производство (Подольск)";
 
-    if (onAddLead) {
-      onAddLead({
+    fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         id: `lead-contact-${Date.now()}`,
         name: formData.name.trim(),
         phone: formData.phone.trim(),
         category: leadCategory,
         comments: `Запрос контактов. Желаемое время: ${formData.preferredTime || "Не указано"}. Комментарий: ${formData.comments.trim() || "Без комментариев"}`,
-        createdAt: new Date().toLocaleString("ru-RU", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" }),
         status: "pending"
-      });
-    }
+      })
+    }).catch(() => {});
 
     onNotify("Ваша заявка успешно принята! Менеджер свяжется с вами в течение 10 минут.", "success");
     setSubmitted(true);
@@ -277,9 +282,24 @@ export default function ContactsPage({ onNotify, onAddLead }: ContactsPageProps)
                     ></textarea>
                   </div>
 
+                  <label className="flex items-start gap-3 cursor-pointer group">
+                    <div className="relative mt-0.5 shrink-0">
+                      <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} className="sr-only" />
+                      <div className={`w-4 h-4 border rounded-sm transition-all ${consent ? "bg-[#ff8562] border-[#ff8562]" : "border-white/20 bg-black/40 group-hover:border-white/40"}`}>
+                        {consent && <svg className="w-3 h-3 text-white m-auto" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-white/40 font-sans leading-relaxed">
+                      Я согласен(-а) на обработку персональных данных в соответствии с{" "}
+                      <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-[#ff8562] hover:underline">Политикой конфиденциальности</a>
+                      {" "}согласно ФЗ № 152-ФЗ.
+                    </span>
+                  </label>
+
                   <button
                     type="submit"
-                    className="w-full py-3 bg-white text-black hover:bg-[#ff8562] hover:text-white transition-colors text-xs font-mono font-bold uppercase tracking-widest cursor-pointer flex items-center justify-center gap-1.5"
+                    disabled={!consent}
+                    className="w-full py-3 bg-white text-black hover:bg-[#ff8562] hover:text-white transition-colors text-xs font-mono font-bold uppercase tracking-widest cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <span>Отправить запрос</span>
                     <ArrowRight className="w-3.5 h-3.5" />

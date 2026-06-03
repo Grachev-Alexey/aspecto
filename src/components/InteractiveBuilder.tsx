@@ -3,7 +3,6 @@ import { Sliders, HelpCircle, Check, Sparkles, AlertCircle, FileText, Layers, Ar
 
 interface InteractiveBuilderProps {
   onNotify: (message: string, type: "success" | "info") => void;
-  onAddLead?: (lead: any) => void;
 }
 
 const WOOD_OPTIONS = [
@@ -62,7 +61,7 @@ const PROFILE_COLORS = [
   { id: "chrome-satin", name: "Сатинированный матовый хром" }
 ];
 
-export default function InteractiveBuilder({ onNotify, onAddLead }: InteractiveBuilderProps) {
+export default function InteractiveBuilder({ onNotify }: InteractiveBuilderProps) {
   // Current active builder type: 'table' | 'kitchen' | 'wardrobe'
   const [activeTab, setActiveTab] = useState<"table" | "kitchen" | "wardrobe">("table");
 
@@ -147,17 +146,18 @@ export default function InteractiveBuilder({ onNotify, onAddLead }: InteractiveB
         commentsText += `Материал раздвижных дверей: ${selectedWardrobeMat.name}, Профиль дверей: ${selectedProfileColor.name}, Ширина шкафа: ${wardrobeWidth * 10} мм, Светодиодный профиль: ${withLed ? "Встроен (датчик движения)" : "Нет"}.`;
       }
 
-      if (onAddLead) {
-        onAddLead({
+      fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           id: `lead-builder-${Date.now()}`,
           name: clientName.trim(),
           phone: clientPhone.trim(),
           category: `Конструктор: ${typeLabels[activeTab]}`,
           comments: commentsText,
-          createdAt: new Date().toLocaleString("ru-RU", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" }),
           status: "pending"
-        });
-      }
+        })
+      }).catch(() => {});
 
       setClientName("");
       setClientPhone("");

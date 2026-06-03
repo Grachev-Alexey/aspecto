@@ -3,11 +3,10 @@ import { Phone, MapPin, Mail, Clock, Hammer, ExternalLink } from "lucide-react";
 
 interface FooterProps {
   onScrollToSection: (sectionId: string) => void;
-  onOpenAdmin?: () => void;
   onNavigate: (page: "home" | "builder" | "contacts" | "legal") => void;
 }
 
-export default function Footer({ onScrollToSection, onOpenAdmin, onNavigate }: FooterProps) {
+export default function Footer({ onScrollToSection, onNavigate }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -31,16 +30,8 @@ export default function Footer({ onScrollToSection, onOpenAdmin, onNavigate }: F
           <p className="font-sans leading-relaxed text-white/40 pr-4">
             Проектирование и собственное производство корпусной мебели любой сложности и эксклюзивных столов по индивидуальным размерам с гарантией 10 лет.
           </p>
-          <div className="mt-6 text-[10px] uppercase tracking-wider text-[#ff8562] font-mono flex items-center gap-2">
+          <div className="mt-6 text-[10px] uppercase tracking-wider text-[#ff8562] font-mono">
             <span>© 2012–{currentYear} Аспекто</span>
-            {onOpenAdmin && (
-              <button
-                onClick={onOpenAdmin}
-                className="hover:text-white px-1 bg-white/5 border border-white/10 rounded text-[9px] cursor-pointer"
-              >
-                Администрирование🔒
-              </button>
-            )}
           </div>
         </div>
 

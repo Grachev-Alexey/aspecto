@@ -1,7 +1,7 @@
 export interface FurnitureItem {
   id: string;
   title: string;
-  category: "kitchen" | "living" | "wardrobe" | "premium";
+  category: string;
   image: string;
   description: string;
   materials: string[];
@@ -34,11 +34,18 @@ export interface ShowroomBookingData {
 export interface MaterialSample {
   id: string;
   name: string;
-  category: "wood" | "fabric" | "metal";
+  category: string;
   image: string;
   origin: string;
   finishType: string;
   description: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  type: "product" | "material";
+  sort_order: number;
 }
 
 export interface PortfolioProject {

@@ -7,10 +7,9 @@ interface CatalogGridProps {
   onNotify: (message: string, type: "success" | "info") => void;
   onOpenInquiry: (category?: string) => void;
   products: FurnitureItem[];
-  onAddLead?: (lead: any) => void;
 }
 
-export default function CatalogGrid({ onNotify, onOpenInquiry, products, onAddLead }: CatalogGridProps) {
+export default function CatalogGrid({ onNotify, onOpenInquiry, products }: CatalogGridProps) {
   const [activeTab, setActiveTab] = useState<"all" | "kitchen" | "living" | "wardrobe" | "premium">("all");
   const [selectedProduct, setSelectedProduct] = useState<FurnitureItem | null>(null);
 
@@ -32,30 +31,30 @@ export default function CatalogGrid({ onNotify, onOpenInquiry, products, onAddLe
       return;
     }
 
+    if (selectedProduct) {
+      fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: `lead-${Date.now()}`,
+          name: inquiryName.trim(),
+          phone: inquiryPhone.trim(),
+          category: `Расчет "${selectedProduct.title}"`,
+          comments: `Потребитель запросил детальный сметный расчет модели "${selectedProduct.title}". Потребуются размеры: ${selectedProduct.dimensions}.`,
+          status: "pending"
+        })
+      }).catch(() => {});
+    }
     setModalInquirySubmitted(true);
     setTimeout(() => {
       onNotify(
         `Запрос на расчет модели "${selectedProduct?.title}" отправлен! Мы сделаем чертеж и перезвоним по номеру ${inquiryPhone} в ближайшее время.`,
         "success"
       );
-
-      // Save lead to database
-      if (onAddLead && selectedProduct) {
-        onAddLead({
-          id: `lead-${Date.now()}`,
-          name: inquiryName.trim(),
-          phone: inquiryPhone.trim(),
-          category: `Расчет "${selectedProduct.title}"`,
-          comments: `Потребитель запросил детальный сметный расчет модели "${selectedProduct.title}". Потребуются размеры: ${selectedProduct.dimensions}.`,
-          createdAt: new Date().toLocaleString("ru-RU", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" }),
-          status: "pending"
-        });
-      }
-
       setInquiryName("");
       setInquiryPhone("");
       setModalInquirySubmitted(false);
-      setSelectedProduct(null); // Close modal
+      setSelectedProduct(null);
     }, 1200);
   };
 
